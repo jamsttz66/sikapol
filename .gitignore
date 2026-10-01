@@ -1,0 +1,19 @@
+# Database — jangan di-commit (berisi data pasien asli)
+data/*.sqlite
+data/*.sqlite-journal
+data/*.db
+
+# Backup
+backup/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Log
+*.log
