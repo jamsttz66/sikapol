@@ -16,7 +16,16 @@ session_start();
 define('APP_NAME', 'SIKAPOL');
 define('APP_FULL', 'Sistem Informasi Kunjungan Poliklinik');
 define('APP_INSTANSI', 'Lapas Kelas IIB Polewali');
-define('APP_VERSION', '1.0.0');
+define('APP_VERSION', '1.2.0');
+
+/** Nama bulan & hari dalam bahasa Indonesia */
+const BULAN_INDO = [
+    1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+];
+const HARI_INDO = [
+    1 => 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu',
+];
 
 define('DB_FILE', __DIR__ . '/data/sikapol.sqlite');
 define('DATA_DIR', __DIR__ . '/data');
@@ -220,15 +229,57 @@ function tanggalIndo(?string $date): string
     if (!$date) {
         return '-';
     }
-    $bulan = [
-        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
-    ];
     $ts = strtotime($date);
     if ($ts === false) {
         return (string) $date;
     }
-    return date('j', $ts) . ' ' . $bulan[(int) date('n', $ts)] . ' ' . date('Y', $ts);
+    return date('j', $ts) . ' ' . BULAN_INDO[(int) date('n', $ts)] . ' ' . date('Y', $ts);
+}
+
+/**
+ * True kalau aplikasi jalan di lokal / lingkungan pengembangan.
+ * Dipakai untuk menyembunyikan info akun demo di server produksi.
+ */
+function isLingkunganDemo(): bool
+{
+    $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+    $host = explode(':', $host)[0];
+
+    if (in_array($host, ['localhost', '127.0.0.1', '::1', ''], true)) {
+        return true;
+    }
+
+    // nama host internal / tunnel preview
+    foreach (['.local', '.test', 'serveousercontent.com', 'ngrok', 'trycloudflare'] as $pola) {
+        if (str_contains($host, $pola)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * "2026-10" atau "2026-10-01" → "Oktober 2026"
+ */
+function bulanIndo(?string $date): string
+{
+    if (!$date) {
+        return '-';
+    }
+    $ts = strtotime(strlen($date) <= 7 ? $date . '-01' : $date);
+    return $ts === false
+        ? (string) $date
+        : BULAN_INDO[(int) date('n', $ts)] . ' ' . date('Y', $ts);
+}
+
+/**
+ * "2026-10-01" → "Kamis"
+ */
+function hariIndo(?string $date): string
+{
+    $ts = $date ? strtotime($date) : false;
+    return $ts === false ? '-' : HARI_INDO[(int) date('N', $ts)];
 }
 
 /* ------------------------------------------------------------------

@@ -62,8 +62,11 @@
 
     if (q.length < 2) {
       counter.textContent = '-';
-      panel.innerHTML = '<div class="empty-state"><i class="bi bi-person-bounding-box"></i>' +
-        'Ketik atau pilih nama pasien untuk melihat riwayat kunjungannya.</div>';
+      panel.innerHTML = '<div class="empty-state" style="padding:2rem 1rem">' +
+        '<i class="bi bi-person-bounding-box"></i>' +
+        '<div class="fw-semibold mb-1" style="color:#33514b">Riwayat pasien muncul di sini</div>' +
+        '<div style="font-size:.79rem;line-height:1.6">Mulai ketik nama pasien, riwayat kunjungan ' +
+        'sebelumnya akan otomatis ditampilkan \u2014 supaya tidak terjadi pencatatan ganda.</div></div>';
       return;
     }
 

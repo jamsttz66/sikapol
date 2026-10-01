@@ -123,10 +123,17 @@ require __DIR__ . '/partials/header.php';
                      placeholder="Contoh: Blok A - Kamar 03" required>
             </div>
 
-            <div class="col-md-5">
+            <div class="col-12 col-md-5">
               <label class="form-label" for="tanggal">Tanggal Kunjungan <span class="text-danger">*</span></label>
               <input type="date" class="form-control <?= isset($errors['tanggal']) ? 'is-invalid' : '' ?>"
                      id="tanggal" name="tanggal" value="<?= e($form['tanggal']) ?>" required>
+            </div>
+
+            <div class="col-12 col-md-7 d-flex align-items-end">
+              <div class="info-inline w-100">
+                <i class="bi bi-lightbulb"></i>
+                <span>Tanggal otomatis terisi hari ini. Ubah kalau mencatat kunjungan lama.</span>
+              </div>
             </div>
 
             <div class="col-12">
@@ -173,9 +180,13 @@ require __DIR__ . '/partials/header.php';
         <span class="badge badge-soft" id="jumlahRiwayat">-</span>
       </div>
       <div class="card-body" id="isiRiwayat">
-        <div class="empty-state">
+        <div class="empty-state" style="padding:2rem 1rem">
           <i class="bi bi-person-bounding-box"></i>
-          Ketik atau pilih nama pasien untuk melihat riwayat kunjungannya.
+          <div class="fw-semibold mb-1" style="color:var(--ink-700)">Riwayat pasien muncul di sini</div>
+          <div style="font-size:.79rem;line-height:1.6">
+            Mulai ketik nama pasien, riwayat kunjungan sebelumnya akan otomatis ditampilkan —
+            supaya tidak terjadi pencatatan ganda.
+          </div>
         </div>
       </div>
     </div>
